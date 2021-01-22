@@ -1,23 +1,32 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from "react";
+import "./App.css";
+import run from "./stringFetcher";
 
 function App() {
+  const [string, setString] = useState("Hello friends");
+
+  const handleSubmit = (evt) => {
+    evt.preventDefault();
+    run(string);
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>
+        This is the string - {string} <span></span>
+      </h1>
+      <form onSubmit={handleSubmit}>
+        <label for="String">Enter the string</label>
+        <input
+          type="text"
+          id="String"
+          name="String"
+          value={string}
+          onChange={(e) => setString(e.target.value)}
+        />
+        <br />
+        <input type="submit" value="Submit" />
+      </form>
     </div>
   );
 }
