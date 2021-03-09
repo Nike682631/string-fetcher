@@ -1,0 +1,24 @@
+{
+  "mnemonic": [
+    "spare",
+    "practice",
+    "gloom",
+    "uncover",
+    "marble",
+    "milk",
+    "clutch",
+    "audit",
+    "burst",
+    "catch",
+    "arrive",
+    "ask",
+    "hub",
+    "fatigue",
+    "mail"
+  ],
+  "secret": "7f2a991d6f1802937c2cfd18d793f35c98b7f198",
+  "amount": "23745748033",
+  "pkh": "tz1McqiPp8HUVQBWLchBXWR5imC4YmdEW4z3",
+  "password": "HTnjq6EZJ0",
+  "email": "egszzdbp.hitolfhz@tezos.example.org"
+}

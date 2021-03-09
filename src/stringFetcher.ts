@@ -21,44 +21,42 @@ import { KeyStoreUtils, SoftSigner } from "conseiljs-softsigner";
 // registerLogger(logger); //Used to register logger variable
 // registerFetch(fetch); //Used to register fetch
 
-const tezosNode = "https://tezos-dev.cryptonomic-infra.tech:443"; //Tezos testnet node
+const tezosNode =
+  "https://cors-anywhere.herokuapp.com/https://tezos-dev.cryptonomic-infra.tech:443"; //Tezos testnet node
 const conseilServer = {
-  url: "https://conseil-dev.cryptonomic-infra.tech:443", //Conseil testnet node
+  url:
+    "https://cors-anywhere.herokuapp.com/https://conseil-dev.cryptonomic-infra.tech:443", //Conseil testnet node
   apiKey: "6bfc2097-39f8-4020-8a3d-3d9d026e8c8d", //API key
   network: "delphinet",
 }; //Tesnet version
 const networkBlockTime = 30 + 1;
 
 async function initAccount(account: string): Promise<KeyStore> {
-  //In this function we basically take our faucet accounts that we get from https://faucet.tzalpha.net/
-  //and import the downloaded file's content into faucetAccount variable.
-  //Then we create keystore(set of keys) using the restoreIdentityfromfundraiser function in Keystoreutils module
-
   console.log("~~ initAccount");
   console.log(`loading ${account} faucet file`);
   const faucetAccount = {
     mnemonic: [
-      "mention",
-      "crop",
-      "wonder",
-      "syrup",
-      "bomb",
-      "forward",
-      "math",
-      "october",
-      "multiply",
-      "penalty",
-      "ship",
-      "virtual",
-      "crumble",
-      "unhappy",
-      "utility",
+      "spare",
+      "practice",
+      "gloom",
+      "uncover",
+      "marble",
+      "milk",
+      "clutch",
+      "audit",
+      "burst",
+      "catch",
+      "arrive",
+      "ask",
+      "hub",
+      "fatigue",
+      "mail",
     ],
-    secret: "3a341c08c3653d0ceba4a80c4e475785e61e181e",
-    amount: "18410048957",
-    pkh: "tz1UBGwmgJ4H1CsAC2sJoS987eBaH6NePZnk",
-    password: "gv8ogzkeM5",
-    email: "svtzhvlx.xrrlifql@tezos.example.org",
+    secret: "7f2a991d6f1802937c2cfd18d793f35c98b7f198",
+    amount: "23745748033",
+    pkh: "tz1McqiPp8HUVQBWLchBXWR5imC4YmdEW4z3",
+    password: "HTnjq6EZJ0",
+    email: "egszzdbp.hitolfhz@tezos.example.org",
   };
   const keystore = await KeyStoreUtils.restoreIdentityFromFundraiser(
     faucetAccount.mnemonic.join(" "),
@@ -71,10 +69,6 @@ async function initAccount(account: string): Promise<KeyStore> {
 }
 
 async function revealAccount(keystore: KeyStore) {
-  //Every faucet account  needs to be needs to be once  every time we run our code
-  //We do that in this function using sendKeyRevealOperation function in TezosNodeWriter module
-  // isManagerKeyRevealedForAccount function verifies if the account has already sent a reveal operation.
-
   let signer: Signer = await SoftSigner.createSigner(
     TezosMessageUtils.writeKeyWithHint(keystore.secretKey, "edsk")
   );
@@ -105,9 +99,6 @@ async function revealAccount(keystore: KeyStore) {
 }
 
 async function statOperation(groupid: string) {
-  //The various send functions return an operation group hash which can be passed to
-  //TezosConseilClient.awaitOperationConfirmation(...) to await its appearance on the chain.
-
   const result = await TezosConseilClient.awaitOperationConfirmation(
     conseilServer,
     conseilServer.network,
@@ -147,7 +138,7 @@ function clearRPCOperationGroupHash(hash: string) {
 }
 
 async function run(string: string) {
-  const originator = "tz1UBGwmgJ4H1CsAC2sJoS987eBaH6NePZnk"; //publickeyhash(pkh) of the faucet accounts
+  const originator = "tz1McqiPp8HUVQBWLchBXWR5imC4YmdEW4z3"; //publickeyhash(pkh) of the faucet accounts
 
   let groupid = "";
   let contractAddress = "";
@@ -156,37 +147,21 @@ async function run(string: string) {
   let keystore = await initAccount(originator);
   await revealAccount(keystore);
 
-  const storageResult = await TezosNodeReader.getContractStorage(
-    conseilServer.url,
-    originator
-  );
   let signer: Signer = await SoftSigner.createSigner(
     TezosMessageUtils.writeKeyWithHint(keystore.secretKey, "edsk")
   );
 
-  let contract = `
-  parameter string;
-  storage   string;
-  code
-    {
-      CAR;        # @parameter
-      # == replace ==
-      # self.data.storedValue = params.value # @parameter
-      NIL operation; # list operation : @parameter
-      PAIR;       # pair (list operation) @parameter
-    };`;
-
   TezosNodeWriter.sendContractInvocationOperation(
-    conseilServer.url,
+    tezosNode,
     signer,
     keystore,
-    contract,
+    "KT1VQNU7XC1ZUr4GABrdMCfUaw6cXQ91XxWE",
     0,
-    100,
-    TezosConstants.P005ManagerContractWithdrawalStorageLimit,
-    TezosConstants.P005ManagerContractWithdrawalGasLimit,
-    "default",
-    string,
+    50000,
+    500,
+    30000,
+    undefined,
+    `"${string}"`,
     TezosParameterFormat.Michelson
   );
 }
