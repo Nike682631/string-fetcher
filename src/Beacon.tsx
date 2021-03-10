@@ -26,6 +26,11 @@ import {
   }
   
   export async function send(operation: PartialTezosTransactionOperation) {
+    const activeAccount = await client.getActiveAccount()
+    if (!activeAccount) {
+      await client.requestPermissions()
+    }
+
     client
       .requestOperation({
         operationDetails: [operation],
