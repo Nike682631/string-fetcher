@@ -14,7 +14,8 @@ function App() {
     send({
       kind: TezosOperationType.TRANSACTION,
       amount: 0,
-      destination: "KT1VQNU7XC1ZUr4GABrdMCfUaw6cXQ91XxWE",
+      // "KT1VQNU7XC1ZUr4GABrdMCfUaw6cXQ91XxWE"
+      destination: "KT1TTBR5SJpW7QcU97pQbPKF5pK2zNEM2GVE",
       parameters: string
     });
   };
